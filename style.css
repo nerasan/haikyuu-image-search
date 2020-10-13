@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap');
+
+* {
+    font-family: 'Concert One', cursive;
+    color:#3d3d42;
+}
+
+body {
+    background-color: #ffb973;
+    background-image: url("./images/transbg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+
+h1 {
+    font-family: 'Abril Fatface', cursive;
+}
+
+img {
+    max-width: 50%;
+    padding: 10px;
+}
+
+#defaultpic {
+    width: 60%;
+}
+
+#imageBox {
+    margin: 25px auto;
+    width: 100%;
+    /* max-width: 800px; */
+}
+
+input, form, button, #reset {
+    margin: 25px 0 0 0;
+    color: #000000;
+    border: 0px solid black;
+    border-radius: 10px;
+}
+
+input:focus {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+#input {
+    margin: 0 10px 0 0;
+}
+
+#text {
+    margin: 20px 0 0 0;
+}
+
+p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+#risk {
+    margin: 10px 0 0 0;
+}
