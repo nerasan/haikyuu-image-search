@@ -11,6 +11,7 @@ body {
     background-image: url("./images/transbg.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
     text-align: center;
 }
 

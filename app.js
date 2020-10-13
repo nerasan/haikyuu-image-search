@@ -21,9 +21,18 @@ const fetchPlayer = (keyword) => {
             let imageBox = document.createElement("div")
             imageBox.setAttribute("id", "imageBox")
             container.appendChild(imageBox)
-            let image = document.createElement("img")
-            image.setAttribute("src", redditpic)
-            imageBox.appendChild(image)
+
+            console.log(redditpic)
+
+            if (redditpic === undefined) {
+                let searcherror = document.createElement("p")
+                searcherror.innerText = "no results found! search another word :)"
+                imageBox.appendChild(searcherror)
+            } else {
+                let image = document.createElement("img")
+                image.setAttribute("src", redditpic)
+                imageBox.appendChild(image)
+            }
         }
         // add reddit link -- NOT USED AT THE MOMENT SINCE I HAD TO CHANGE CODE FOR RESET BUTTON/CLEAR INTERVAL. might revisit later!
         // const addRedditLink = (redditlink) => {
