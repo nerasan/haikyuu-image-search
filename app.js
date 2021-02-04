@@ -1,7 +1,9 @@
 // declaring the variables for request url and subreddit 
 const requestUrl = "https://www.reddit.com/search.json?q="
-const subreddit = "+subreddit:haikyuu+nsfw:no"
+const subreddit = "+subreddit:haikyuu+nsfw:no+is_video:false"
 let counter = -1
+
+// need to fix to not grab text-only posts
 
 // AJAX function
 const fetchPlayer = (keyword) => {
@@ -13,8 +15,25 @@ const fetchPlayer = (keyword) => {
         // DECLARING ALL FUNCTIONS
         const addLayout = () => {
             let title = document.createElement("h1")
-            title.innerHTML = "nice search!"
+            title.innerHTML = keyword + "? nice search!"
             container.appendChild(title)
+        }
+        // add title
+        const addTitle = (postTitle) => {
+            let titleBox = document.createElement("div")
+            titleBox.setAttribute("id", "titleBox")
+            container.appendChild(titleBox)
+
+            if (postTitle === undefined) {
+                // does not work
+                let titleText = document.createElement("h3")
+                titleText.innerText = "...but no results were found!"
+                titleBox.appendChild(titleText)
+            } else {
+                let titleText = document.createElement("h3")
+                titleText.innerText = postTitle
+                titleBox.appendChild(titleText)
+            }
         }
         // add image 
         const addImage = (redditpic) => {
@@ -22,11 +41,9 @@ const fetchPlayer = (keyword) => {
             imageBox.setAttribute("id", "imageBox")
             container.appendChild(imageBox)
 
-            console.log(redditpic)
-
             if (redditpic === undefined) {
                 let searcherror = document.createElement("p")
-                searcherror.innerText = "no results found! search another word :)"
+                searcherror.innerText = "search another player or word :)"
                 imageBox.appendChild(searcherror)
             } else {
                 let image = document.createElement("img")
@@ -35,16 +52,27 @@ const fetchPlayer = (keyword) => {
             }
         }
         // add reddit link -- NOT USED AT THE MOMENT SINCE I HAD TO CHANGE CODE FOR RESET BUTTON/CLEAR INTERVAL. might revisit later!
-        // const addRedditLink = (redditlink) => {
-        //     let source = document.createElement("div")
-        //     source.setAttribute("id", "source")
-        //     container.appendChild(source)
-        //     let link = document.createElement("a")
-        //     link.setAttribute("href", redditlink)
-        //     link.setAttribute("target", "_blank")
-        //     source.appendChild(link)
-        //     link.innerText = "see full post"
-        // }
+        const addRedditLink = (redditlink) => {
+            let source = document.createElement("div")
+            source.setAttribute("id", "source")
+            container.appendChild(source)
+            // console.log(redditlink)
+
+            if (redditlink.includes(undefined)) {
+                return
+                // let link = document.createElement("a")
+                // link.setAttribute("href", "http://reddit.com/r/haikyuu")
+                // link.setAttribute("target", "_blank")
+                // source.appendChild(link)
+                // link.innerText = "visit the haikyuu subreddit"
+            } else {
+                let link = document.createElement("a")
+                link.setAttribute("href", redditlink)
+                link.setAttribute("target", "_blank")
+                source.appendChild(link)
+                link.innerText = "see the full post on reddit"
+            }
+        }
         // add reset button
         const addResetButton = () => {
             let resetButton = document.createElement("button")
@@ -69,7 +97,7 @@ const fetchPlayer = (keyword) => {
         // functions to create all original elements in default search page -- THIS ENDED UP REALLY LONG BECAUSE I HAD TOO MANY THINGS AT THE START PAGE
         const addOriginalElements = () => {
             let h1 = document.createElement("h1")
-            h1.innerText = "search a word, get haikyuu-related pictures"
+            h1.innerText = "search your favorite haikyuu character"
             container.appendChild(h1)
             let imageBox = document.createElement("div")
             imageBox.setAttribute("id", "imageBox")
@@ -102,8 +130,14 @@ const fetchPlayer = (keyword) => {
             text.appendChild(p)
         }
 
-        let children = jsonData.data.children // this is the array of children
+        // array of children from json data
+        let children = jsonData.data.children
         //console.log("array of children:", children) // console logging the children array
+
+        // title of post
+        let postTitle = children.map((child) => {
+            return child.data.title
+        })
         
         // unfiltered images
         let images = children.map((child)=>{
@@ -119,7 +153,7 @@ const fetchPlayer = (keyword) => {
         
         // discussed this one with camille since we were stuck on filtering!! she gets the creds here :)
         const filterPics = (str) => {
-            if(str.includes(".jpg")) {
+            if(str.includes(".jpg") || str.includes(".png")) {
                 return true 
             } else {
                 return false 
@@ -128,7 +162,8 @@ const fetchPlayer = (keyword) => {
         
         // create array of images filtered to only return if it has jpg
         let jpgs = images.filter(filterPics)
-        // slideshow function that runs every 5 seconds
+
+        // slideshow function that runs every 10 seconds
         const slideshow = () => {
             ++counter
             if (counter >= jpgs.length) {
@@ -136,10 +171,11 @@ const fetchPlayer = (keyword) => {
             }
             clear()
             addLayout()
+            addTitle(postTitle[counter])
+            let redditlink = "https://www.reddit.com" + permalinks[counter]
+            addRedditLink(redditlink)
             addImage(jpgs[counter])
             addResetButton()
-            //let redditlink = "https://www.reddit.com" + permalinks[counter]
-            //addRedditLink(redditlink)
         }
         const interval = setInterval(slideshow, 5000)
         clear()
